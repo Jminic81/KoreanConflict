@@ -8,21 +8,15 @@ for(i in 1:36574){
   if(incident==FALSE & fatality==TRUE){
     deaths$INCIDENT_DATE[i]<-deaths$FATALITY[i]
   }
-print(i)
-  }
+  print(i)
+}
 
 df<-deaths%>%
-  filter(str_detect(deaths$INCIDENT_DATE,"\\d{8}")==TRUE)%>%
-  group_by(INCIDENT_DATE)%>%
+  filter(str_detect(deaths$BIRTH_YEAR,"\\d{4}"))%>%
+  group_by(BIRTH_YEAR)%>%
   summarize(num_deaths=n())%>%
-  mutate(date=ymd(INCIDENT_DATE))%>%
-  filter(date<"1953-07-27")%>%
-  select(INCIDENT_DATE,num_deaths,date)
-  
+  select(BIRTH_YEAR,num_deaths)
+
 ggplot()+
-  geom_line(data=df,aes(x=date,y=num_deaths))+
-  scale_x_date(date_breaks='3 months',date_labels="%b,%y")
-  
-  
-  
-  
+  geom_line(data=df,aes(x=BIRTH_YEAR,y=num_deaths))
+
